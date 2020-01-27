@@ -13,8 +13,7 @@ Gem::Specification.new do |spec|
     The point of this gem is to monitor your hosts for (unwanted) DNS changes.
     The `dns-monitor` file is designed to be run as a CRON job. It takes a
     return-delimited text file listing domain names, and checks an RDAP
-    database (which you can specify) for JSON entries that match. You will get
-    an error, optionally by GChat, if you encounter a changed entry.
+    database (which you can specify) for JSON entries that match. 
   DESCRIPTION
   spec.homepage      = "https://github.com/exploration/dns-monitor"
   spec.license       = "MIT"
