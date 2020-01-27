@@ -8,6 +8,7 @@ require 'dns/monitor/check'
 require 'dns/monitor/database'
 require 'dns/monitor/domain'
 require 'dns/monitor/gchat'
+require 'dns/monitor/mandrill'
 require 'dns/monitor/runner'
 
 module DNS

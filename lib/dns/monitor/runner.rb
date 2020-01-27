@@ -20,7 +20,13 @@ module DNS
 
         message = checks.map {|check| check.status}.to_json
         STDOUT.puts message
-        GChat.new(@params[:gchat]).message(message) if @params[:gchat] && checks.any? { |check| !check.ok? }
+
+        if @params[:gchat] #&& checks.any? { |check| !check.ok? }
+          GChat.new(@params[:gchat]).message(message) 
+        end
+        if @params[:mandrill_key] && @params[:mandrill_email] #&& checks.any? { |check| !check.ok? }
+          Mandrill.new(@params[:mandrill_key], @params[:mandrill_email]).message(message)
+        end
       end
 
       def entries
