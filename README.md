@@ -2,6 +2,8 @@
 
 The point of this gem is to monitor your hosts for (unwanted) DNS changes. The executable `dns-monitor` file is designed to be run as a CRON job. It takes a return-delimited text file listing domain names, and checks an RDAP database (which you can specify) for JSON entries that match. You will get an error, optionally by GChat, if you encounter a changed entry.
 
+If you don't think this is something you need, perhaps give [this article](https://krebsonsecurity.com/2019/02/a-deep-dive-on-the-recent-widespread-dns-hijacking-attacks/) a read.
+
 
 
 ## Installation
