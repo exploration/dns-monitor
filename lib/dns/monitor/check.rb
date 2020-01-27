@@ -7,6 +7,10 @@ module DNS
         @status = status
       end
 
+      def changed?
+        @status == :changed
+      end
+
       def ok?
         @status == :ok
       end

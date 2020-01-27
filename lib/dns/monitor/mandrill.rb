@@ -14,7 +14,7 @@ module DNS
       def message(text)
         Net::HTTP.post(
           URI(API_URL), 
-          request(domain, text).to_json, 
+          request(text).to_json, 
           'Content-Type' => 'application/json'
         )
       end

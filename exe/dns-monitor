@@ -29,8 +29,8 @@ OptionParser.new do |opts|
   opts.on('-p', '--domains_path PATH', String, "Path to your domain file list. Defaults to #{params[:domains_path]}")
   opts.on('-m', '--domain DOMAIN', String, 'Print existing results for a given domain as a JSON array')
   opts.on('-u', '--rdap_url URL', String, "URL of your RDAP resolver. Defaults to #{params[:rdap_url]}")
-  opts.on('--mandrill-key KEY', String, "Mandrill API key. REQUIRES --mandrill-email to work.")
-  opts.on('--mandrill-email EMAIL', String, "Mandrill recipient email.")
+  opts.on('--mandrill_key KEY', String, "Mandrill API key. REQUIRES --mandrill-email to work.")
+  opts.on('--mandrill_email EMAIL', String, "Mandrill recipient email.")
 end.parse!(into: params)
 
 

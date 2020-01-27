@@ -26,6 +26,26 @@ Or install it yourself as:
 
 For usage, run `dns-monitor -h`
 
+Since we use them at [EXPLO](https://www.explo.org), we've added flags to send notifications directly via Google Hangouts Chat or via a Mandrill API call. The script will also send updates to STDOUT and STDERR as necessary, so if you don't use either of those services you can pipe output into whichever notification setup you prefer.
+
+Since the script is designed to be run as a CRON job, you can specify with flags where you want to store your `hosts` and database file:
+
+    dns-monitor --check --db_path "/your/db/folder/and_filename.sqlite3" --domains_path "/your/domains/textfile/folder/and_filename.txt"
+
+### Usage with Google Hangouts Chat
+
+To use with Google Hangouts Chat, you'll need to set up a webhook in the appropriate chat room. You'll get a webhook URL which you can send to `dns-monitor` with `-g` or `--gchat` like this:
+
+    dns-monitor --check --gchat YOUR_URL
+
+### Usage with Mandrill
+
+To use with Mandrill, you'll need an API key capable of sending messages, and a recipient email. The 'from' email will automatically be set to `dns-monitor` at your domain, so if you sent `donald@explo.org`, the `FROM` address would be `dns-monitor@explo.org`.
+
+You need to set both flags on the command-line client for Mandrill to be activated, and emails will only be sent if there are changes to the domain list since the previous run:
+
+    dns-monitor --check --mandrill_api "YOURAPIKEY" --mandrill_email "recipient@yourdomain.com"
+
 
 
 ## Development

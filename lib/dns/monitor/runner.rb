@@ -21,16 +21,18 @@ module DNS
         message = checks.map {|check| check.status}.to_json
         STDOUT.puts message
 
-        if @params[:gchat] #&& checks.any? { |check| !check.ok? }
+        if @params[:gchat] 
+          # GChat gets every status update
           GChat.new(@params[:gchat]).message(message) 
         end
-        if @params[:mandrill_key] && @params[:mandrill_email] #&& checks.any? { |check| !check.ok? }
+        if @params[:mandrill_key] && @params[:mandrill_email] && checks.any?(&:changed?)
+          # We only email changed domains
           Mandrill.new(@params[:mandrill_key], @params[:mandrill_email]).message(message)
         end
       end
 
       def entries
-        puts db.entries(@params[:domain]).map{|row| row.to_parsed_h}.to_json
+        STDOUT.puts db.entries(@params[:domain]).map{|row| row.to_parsed_h}.to_json
       end
 
       private
