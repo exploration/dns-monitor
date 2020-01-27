@@ -16,7 +16,7 @@ Gem::Specification.new do |spec|
     database (which you can specify) for JSON entries that match. You will get
     an error, optionally by GChat, if you encounter a changed entry.
   DESCRIPTION
-  spec.homepage      = "https://bitbucket.com/explo/dns-monitor"
+  spec.homepage      = "https://github.com/exploration/dns-monitor"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
