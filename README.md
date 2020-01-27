@@ -24,19 +24,50 @@ Or install it yourself as:
 
 ## Usage
 
-For usage, run `dns-monitor -h`
+For usage, run `dns-monitor -h`.
 
 Since we use them at [EXPLO](https://www.explo.org), we've added flags to send notifications directly via Google Hangouts Chat or via a Mandrill API call. The script will also send updates to STDOUT and STDERR as necessary, so if you don't use either of those services you can pipe output into whichever notification setup you prefer.
 
-Since the script is designed to be run as a CRON job, you can specify with flags where you want to store your `hosts` and database file:
+### Checking All Hosts
 
-    dns-monitor --check --db_path "/your/db/folder/and_filename.sqlite3" --domains_path "/your/domains/textfile/folder/and_filename.txt"
+The main mode is `--check` or `-c`, which will check all hosts in your host file (just a return-delimited text file of top-level hostnames) for DNS changes. Changes will be stored in an SQLite3 database and logged. As noted above, you can be optionally alerted by GChat or email, or you can simply pipe output into whichever alert utility you prefer.
+
+### Checking a Specific Domain
+
+You can get all domain history for a specific domain like this:
+
+```bash
+dns-monitor --domain DOMAIN
+```
+
+You'll get a JSON array of RDAP entries back - every change that's been logged on that domain since you started tracking.
+
+### RDAP Server
+
+DNS::Monitor uses [RDAP](https://www.icann.org/rdap) for checking WHOIS records, because it gives you JSON back! The nice thing about this is that because it's all just JSON + hashes, DNS::Monitor can only display specifically what changed for a domain.
+
+We use and love [Pair Domains](https://pairdomains.com) as our registrar, so we've coded their RDAP server in by default, but if you have a different registrar, you'll want to pass a flag to change that server eg:
+
+```bash
+dns-monitor --check --rdap_url https://your-rdap-server.com
+```
+
+### File Paths
+
+Since the script is designed to be run as a CRON job, you can specify with flags where you want to store your `hosts.txt` and database (sqlite) file:
+
+```bash
+dns-monitor --check --db_path "/your/db/folder/and_filename.sqlite3" --domains_path "/your/domains/textfile/folder/and_filename.txt"
+```
+
 
 ### Usage with Google Hangouts Chat
 
 To use with Google Hangouts Chat, you'll need to set up a webhook in the appropriate chat room. You'll get a webhook URL which you can send to `dns-monitor` with `-g` or `--gchat` like this:
 
-    dns-monitor --check --gchat YOUR_URL
+```bash
+dns-monitor --check --gchat YOUR_WEBHOOK_URL
+```
 
 ### Usage with Mandrill
 
@@ -44,7 +75,9 @@ To use with Mandrill, you'll need an API key capable of sending messages, and a 
 
 You need to set both flags on the command-line client for Mandrill to be activated, and emails will only be sent if there are changes to the domain list since the previous run:
 
-    dns-monitor --check --mandrill_api "YOURAPIKEY" --mandrill_email "recipient@yourdomain.com"
+```bash
+dns-monitor --check --mandrill_api "YOURAPIKEY" --mandrill_email "recipient@yourdomain.com"
+```
 
 
 
