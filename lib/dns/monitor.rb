@@ -1,3 +1,4 @@
+require 'easy_diff'
 require 'json'
 require 'net/http'
 require 'optparse'

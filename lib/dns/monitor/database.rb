@@ -14,6 +14,7 @@ module DNS
         return if domain.nil? || rdap.nil?
 
         changes = diff(most_recent(domain).rdap, rdap)
+
         if changes.empty?
           Check.new domain, :ok
         else
@@ -28,13 +29,10 @@ module DNS
       end
 
       # Compare two different RDAP values
-      # NOTE: We have to do a JSON conversion because the values come back
-      #   from the server in arbitrary JSON key order.
-      def diff(rdap, previous_rdap)
-        (
-          JSON.parse(previous_rdap || '{}').to_a - 
-          JSON.parse(rdap || '{}').to_a
-        ).to_h
+      # NOTE: We have to do a JSON conversion because the values come
+      #   back from the server in arbitrary JSON key order.
+      def diff(previous_rdap, rdap)
+        JSON.parse(previous_rdap).easy_diff(JSON.parse(rdap)).last
       end
 
       # Return all entries for a given domain as a Domain struct
