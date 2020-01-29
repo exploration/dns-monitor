@@ -35,7 +35,7 @@ module DNS
         # We get a lot of "last update of RDAP" events which aren't something we need notifications about. Remove those.
         if changes.fetch(:events, false)
           changes[:events] = changes[:events].reject do |event|
-            e.fetch(:eventAction, '').match?(/last update of RDAP/i)
+            event.fetch(:eventAction, '').match?(/last update of RDAP/i)
           end
           changes.delete(:events) if changes[:events].empty?
         end
