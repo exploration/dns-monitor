@@ -13,7 +13,7 @@ module DNS
       def check(domain, rdap)
         return if domain.nil? || rdap.nil?
 
-        changes = diff(most_recent(domain).rdap, rdap)
+        changes = diff((most_recent(domain).rdap || '{}'), rdap)
 
         if changes.empty?
           Check.new domain, :ok
@@ -29,10 +29,17 @@ module DNS
       end
 
       # Compare two different RDAP values
-      # NOTE: We have to do a JSON conversion because the values come
-      #   back from the server in arbitrary JSON key order.
+      # NOTE: We have to do a JSON conversion because the values come back from the server in arbitrary JSON key order.
       def diff(previous_rdap, rdap)
-        JSON.parse(previous_rdap).easy_diff(JSON.parse(rdap)).last
+        changes = JSON.parse(previous_rdap).easy_diff(JSON.parse(rdap)).last
+        # We get a lot of "last update of RDAP" events which aren't something we need notifications about. Remove those.
+        if changes.fetch(:events, false)
+          changes[:events] = changes[:events].reject do |event|
+            e.fetch(:eventAction, '').match?(/last update of RDAP/i)
+          end
+          changes.delete(:events) if changes[:events].empty?
+        end
+        changes 
       end
 
       # Return all entries for a given domain as a Domain struct

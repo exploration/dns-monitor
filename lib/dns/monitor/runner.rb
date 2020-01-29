@@ -1,10 +1,12 @@
 module DNS
   module Monitor
     class Runner
+      # The "Runner" is the back-end for the command-line utility
       def initialize(params)
         @params = params
       end
 
+      # This is the main action we do with this app - check all of the domains
       def check
         begin
           domains = File.read(@params[:domains_path]).split
@@ -31,6 +33,7 @@ module DNS
         end
       end
 
+      # This is an alternative app action - check the history for a particular domain.
       def entries
         STDOUT.puts db.entries(@params[:domain]).map{|row| row.to_parsed_h}.to_json
       end

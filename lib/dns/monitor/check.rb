@@ -1,6 +1,7 @@
 module DNS
   module Monitor
     class Check
+      # A "Check" is an encapsulated domain query result.
       def initialize(domain, status, diff={})
         @diff = diff
         @domain = domain
