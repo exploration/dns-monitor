@@ -47,19 +47,19 @@ class DNS::DatabaseTest < Minitest::Test
   end
 
   def test_removing_noisy_keys
-    noisy_changes = {:events=> [{
-      :eventAction=>"last update of RDAP database",
-      :eventDate=>"2020-01-30T13:00:06+0000Z"
+    noisy_changes = {'events' => [{
+      'eventAction' =>"last update of RDAP database",
+      'eventDate' =>"2020-01-30T13:00:06+0000Z"
     }]}
     assert_empty @db.filter_noisy_keys(noisy_changes)
 
-    legit_changes = {:events=> [
-      {:eventAction=>"registration", :eventDate=>"2011-06-11T11:46:01+0000Z"},
-      {:eventAction=>"expiration", :eventDate=>"2021-06-11T11:46:01+0000Z"},
-      {:eventDate=>"2020-01-30T14:09:40+0000Z", :eventAction=>"last update of RDAP database"},
-      {:eventDate=>"2020-01-27T00:51:58+0000Z", :eventAction=>"last changed"}
+    legit_changes = {'events' => [
+      {'eventAction' =>"registration", 'eventDate' =>"2011-06-11T11:46:01+0000Z"},
+      {'eventAction' =>"expiration", 'eventDate' =>"2021-06-11T11:46:01+0000Z"},
+      {'eventDate' =>"2020-01-30T14:09:40+0000Z", 'eventAction'=>"last update of RDAP database"},
+      {'eventDate' =>"2020-01-27T00:51:58+0000Z", 'eventAction'=>"last changed"}
     ]}
     refute_empty @db.filter_noisy_keys(legit_changes)
-    assert_equal 3, @db.filter_noisy_keys(legit_changes)[:events].length
+    assert_equal 3, @db.filter_noisy_keys(legit_changes)['events'].length
   end
 end
