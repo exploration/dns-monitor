@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    dns-monitor (0.1.5)
+    dns-monitor (0.1.6)
       easy_diff (~> 1.0.0)
       sqlite3 (~> 1.4.2)
 
