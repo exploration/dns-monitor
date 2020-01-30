@@ -29,23 +29,32 @@ module DNS
       end
 
       # Compare two different RDAP values
-      # NOTE: We have to do a JSON conversion because the values come back from the server in arbitrary JSON key order.
+      # NOTE: We have to do a JSON conversion to compare instead of
+      # String, because the values come back from the server in arbitrary JSON
+      # key order.
       def diff(previous_rdap, rdap)
+        # easy_diff returns [added, removed] hashes, we want "removed"
         changes = JSON.parse(previous_rdap).easy_diff(JSON.parse(rdap)).last
-        # We get a lot of "last update of RDAP" events which aren't something we need notifications about. Remove those.
-        if changes.fetch(:events, false)
-          changes[:events] = changes[:events].reject do |event|
-            event.fetch(:eventAction, '').match?(/last update of RDAP/i)
-          end
-          changes.delete(:events) if changes[:events].empty?
-        end
-        changes 
+        filter_noisy_keys(changes)
       end
 
       # Return all entries for a given domain as a Domain struct
       def entries(domain)
         sql = "SELECT * FROM #{TABLE} WHERE domain=? ORDER BY created_at DESC"
         query {|db| db.execute(sql, [domain]) }.map{ |row| Domain.new(*row) }
+      end
+
+      def filter_noisy_keys(changes)
+        # We get a lot of "last update of RDAP" events which aren't something
+        # we need notifications about. Remove those.
+        # WARNING: mutation follows
+        if changes.fetch(:events, false)
+          changes[:events] = changes[:events].reject do |event|
+            event.fetch(:eventAction, '').match?(/last update of RDAP/i)
+          end
+          changes.delete(:events) if changes[:events].empty?
+        end
+        changes
       end
 
       # Just the latest entry plz
